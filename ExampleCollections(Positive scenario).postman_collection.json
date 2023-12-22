@@ -1,0 +1,694 @@
+{
+	"info": {
+		"_postman_id": "fe020620-cd5e-482d-80a4-65050101e13d",
+		"name": "ExampleCollections(Positive scenario)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21295318",
+		"_collection_link": "https://universal-eclipse-657796.postman.co/workspace/New-Team-Workspace~ee6e317c-defb-4632-9d9f-470e6837b04c/collection/21295318-fe020620-cd5e-482d-80a4-65050101e13d?action=share&source=collection_link&creator=21295318"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "RegistrationNewUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var requestBodyJson = JSON.parse(request.data);\r",
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.environment.set(\"Login\", requestBodyJson.login);\r",
+									"pm.environment.set(\"Password\", requestBodyJson.pass);\r",
+									"\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check value 'login'\", function () {\r",
+									"    pm.expect(jsonData.register_data.login).to.eql(pm.environment.get(\"Login\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check value 'password'\", function () {\r",
+									"    pm.expect(jsonData.register_data.pass).to.eql(pm.environment.get(\"Password\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check 'id' not empty\", function () {\r",
+									"    pm.expect(jsonData.register_data.id).to.not.be.oneOf([null, undefined]);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check value 'status'\", function () {\r",
+									"    pm.expect(jsonData.info.status).to.eql(\"success\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check value 'message'\", function () {\r",
+									"    pm.expect(jsonData.info.message).to.eql(\"User created\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n  \"login\": \"{{$randomFirstName}}\", \r\n  \"pass\": \"{{$randomPassword}}\"\r\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/signup",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Token not empty\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.token).to.not.empty;\r",
+									"\r",
+									"    pm.environment.set(\"Token\", jsonData.token);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"password\": \"{{Password}}\",\r\n  \"username\": \"{{Login}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/login",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetInformationUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check 'id' not empty\", function () {\r",
+									"    pm.expect(jsonData.id).to.not.be.oneOf([null, undefined]);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check value 'login'\", function () {\r",
+									"    pm.expect(jsonData.login).to.eql(pm.environment.get(\"Login\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check value 'pass'\", function () {\r",
+									"    pm.expect(jsonData.pass).to.eql(pm.environment.get(\"Password\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{URL}}/user",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ChangePassword",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var requestBodyJson = JSON.parse(request.data);\r",
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.environment.set(\"Password\", requestBodyJson.password);\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check value 'status'\", function () {\r",
+									"    pm.expect(jsonData.info.status).to.eql(\"success\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check value 'message'\", function () {\r",
+									"    pm.expect(jsonData.info.message).to.eql(\"User password successfully changed\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    \"password\": \"{{$randomPassword}}\"\r\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/user",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login(Check change password)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Token not empty\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.token).to.not.empty;\r",
+									"\r",
+									"    pm.environment.set(\"Token\", jsonData.token);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"password\": \"{{Password}}\",\r\n  \"username\": \"{{Login}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/login",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "File",
+			"item": [
+				{
+					"name": "Download Image",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/octet-stream"
+							}
+						],
+						"url": {
+							"raw": "{{URL}}/files/download",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"files",
+								"download"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Download Last Uploaded",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/files/downloadLastUploaded",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"files",
+								"downloadLastUploaded"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Game",
+			"item": [
+				{
+					"name": "Get User Games",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJNeVRlc3RJUSIsImV4cCI6MTcwMzE2MjY3NywiaWF0IjoxNzAzMTQ0Njc3fQ.nUU1-nqg5tHSUei8vISlPxsFreaOp9E9WOi32NpdTKdm-nLzjkcBaGqlPdAIMrkzstGeSKe0d6STk7jlDAYc_Q"
+							}
+						],
+						"url": {
+							"raw": "{{URL}}/user/games",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"user",
+								"games"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add User Game",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"The tags array length must be greater than zero\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    const tags = responseData.register_data.tags;\r",
+									"    pm.expect(tags.length).to.be.greaterThan(0, \"Tags should not be empty\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"The dlcs array length must be greater than zero\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    const dlcs = responseData.register_data.dlcs;\r",
+									"    pm.expect(dlcs.length).to.be.greaterThan(0, \"DLCs should not be empty\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check 'id' not empty\", function () {\r",
+									"    pm.expect(jsonData.register_data.gameId).to.not.be.oneOf([null, undefined]);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check response value\", function () {\r",
+									"    pm.expect(jsonData.register_data.title).to.eql(pm.environment.get(\"Title\"));\r",
+									"    pm.expect(jsonData.register_data.genre).to.eql(pm.environment.get(\"GenreGame\"));\r",
+									"    pm.expect(jsonData.register_data.requiredAge).to.eql(pm.environment.get(\"RequiredAgeGame\") === \"true\");\r",
+									"    pm.expect(jsonData.register_data.isFree).to.eql(pm.environment.get(\"isFreeGame\") === \"true\");\r",
+									"    pm.expect(jsonData.register_data.price).to.eql(Number(pm.environment.get(\"PriceGame\")));\r",
+									"    pm.expect(jsonData.register_data.company).to.eql(pm.environment.get(\"Company\"));\r",
+									"    pm.expect(jsonData.register_data.rating).to.eql(Number(pm.environment.get(\"RatingGame\")));\r",
+									"    pm.expect(jsonData.register_data.description).to.eql(pm.environment.get(\"DescriptionGame\"));\r",
+									"    pm.expect(jsonData.register_data.rating).to.eql(Number(pm.environment.get(\"RatingGame\")));\r",
+									"    pm.expect(jsonData.register_data.tags[0]).to.eql(pm.environment.get(\"Tags\"));\r",
+									"    pm.expect(jsonData.register_data.dlcs[0].isDlcFree).to.eql(pm.environment.get(\"isDlcFree\") === \"true\");\r",
+									"    pm.expect(jsonData.register_data.dlcs[0].dlcName).to.eql(pm.environment.get(\"DlcName\"));\r",
+									"    pm.expect(jsonData.register_data.dlcs[0].description).to.eql(pm.environment.get(\"DescriptionDlc\"));\r",
+									"    pm.expect(jsonData.register_data.dlcs[0].price).to.eql(Number(pm.environment.get(\"DlcPrice\")));\r",
+									"    pm.expect(jsonData.register_data.dlcs[0].similarDlc.dlcNameFromAnotherGame).to.eql(pm.environment.get(\"DlcNameFromAnotherGame\"));\r",
+									"    pm.expect(jsonData.register_data.dlcs[0].similarDlc.isFree).to.eql(pm.environment.get(\"isFreeGame\") === \"true\");\r",
+									"    pm.expect(jsonData.register_data.requirements.osName).to.eql(pm.environment.get(\"OsName\"));\r",
+									"    pm.expect(jsonData.register_data.requirements.ramGb).to.eql(Number(pm.environment.get(\"RamGb\")));\r",
+									"    pm.expect(jsonData.register_data.requirements.hardDrive).to.eql(Number(pm.environment.get(\"HardDrive\")));\r",
+									"    pm.expect(jsonData.register_data.requirements.videoCard).to.eql(pm.environment.get(\"VideoCard\"));\r",
+									"    pm.expect(jsonData.info.status).to.eql(\"success\");\r",
+									"    pm.expect(jsonData.info.message).to.eql(\"Game created\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "asdasd"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"company\": \"{{Company}}\",\r\n   \"description\":\"{{DescriptionGame}}\",\r\n   \"dlcs\":[\r\n      {\r\n         \"description\":\"{{DescriptionDlc}}\",\r\n         \"dlcName\":\"{{DlcName}}\",\r\n         \"isDlcFree\":{{isDlcFree}},\r\n         \"price\":{{DlcPrice}}, \r\n         \"rating\":{{DlcRating}},\r\n         \"similarDlc\":{\r\n            \"dlcNameFromAnotherGame\":\"{{DlcNameFromAnotherGame}}\",\r\n            \"isFree\":{{isFreeGame}}\r\n         }\r\n      }\r\n   ],\r\n   \"gameId\":{{GameId}},\r\n   \"genre\":\"{{GenreGame}}\",\r\n   \"isFree\":{{isFreeGame}},\r\n   \"price\":{{PriceGame}},\r\n   \"publish_date\":\"2023-12-21T17:10:22.814Z\",\r\n   \"rating\":{{RatingGame}},\r\n   \"requiredAge\":{{RequiredAgeGame}},\r\n   \"requirements\":{\r\n      \"hardDrive\":{{HardDrive}},\r\n      \"osName\":\"{{OsName}}\",\r\n      \"ramGb\":{{RamGb}},\r\n      \"videoCard\":\"{{VideoCard}}\"\r\n   },\r\n   \"tags\":[\r\n      \"{{Tags}}\"\r\n   ],\r\n   \"title\":\"{{Title}}\"\r\n}\r\n"
+						},
+						"url": {
+							"raw": "{{URL}}/user/games",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"user",
+								"games"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Delete User from DB",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									" var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check value response\", function () {\r",
+									"    pm.expect(jsonData.info.status).to.eql(\"success\");\r",
+									"    pm.expect(jsonData.info.message).to.eql(\"User successfully deleted\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "dasdas"
+							}
+						],
+						"url": {
+							"raw": "{{URL}}/user",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Login All User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response does not contain delete login \", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(responseBody).to.not.include(pm.environment.get(\"Login\"));\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{URL}}/users",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
